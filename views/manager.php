@@ -6,14 +6,14 @@ $PATH2IM = ''; // with a trailing slash -- /usr/local/bin/ for liquidweb.com ser
 
 // making a new folder..
 if(isset($_POST['PGFolder'])){
-	// creating a new folder.
+// creating a new folder.
 	$dir = 'uploads/picgal/';
 	$Fname = trim($_POST['PGNewFolder']);
 	if($Fname != ''){
 		$doi = preg_replace("/[^A-Za-z0-9\s+]/", "",$Fname);
 		$doi = str_replace('  ', ' ', $doi);
 		$folder = str_replace(' ', '_', $doi);
-		// make directory
+// make directory
 		$go = mkdir($dir.$folder, 0775);
 		$go2 = mkdir($dir.$folder.'/th/', 0775);
 		//echo '<b>'.$doi.'</b><br />'.$folder.'<br />';
@@ -27,6 +27,7 @@ if(isset($_POST['PGFolder'])){
 }
 
 // uploading a new picture..
+
 if(isset($_POST['PGUpload'])){
 	$theFile = uploadNresizeGallery($_FILES, $dir.$_POST['PGWhichFolder'].'/');
 	if(isset($theFile['small'])){
@@ -45,6 +46,7 @@ if(isset($_POST['PGUpload'])){
 }
 
 //figuring out what page we're on
+
 $path = $_SERVER['REQUEST_URI'];
 $ex = explode('/', $path);
 if(isset($ex[3])){
@@ -54,9 +56,7 @@ if(isset($ex[3])){
 		$pg = 'upload';
 		$doi =str_replace(array('-','_'),'x', $ex[3]);
 		$folder = $ex[3];
-	} else {
-		echo '<b>The folder you are looking for could not be found.</b>';
-	}
+	} 
 }
 
 // editing the image
@@ -65,7 +65,7 @@ if(isset($_POST['imgName']) && isset($_POST['imgSave'])){
 	switch($_POST['imgSave']){
 		case 'Delete Image':
 			echo 'deleting the image<br />';
-			unlink($dir.$folder.'/th/'.$_POST['imgName']);
+			unlink($dir.$folder.'/'.$_POST['imgName']);
 			unlink($dir.$folder.'/th/'.$_POST['imgName']);
 			$write2file = new FileWriting;
 			$gogo = $write2file->editLine($dir.$folder.'/notes.dat.php', array('where' => '0', 'id' => $_POST['imgName'], 'doW' => 'delete'));
@@ -98,15 +98,16 @@ switch($pg){
 				<div>
 		<?php
 // open and read the notes file..
-		$fi = file($dir.$folder.'/notes.dat.php');
+		
+$fi = file($dir.$folder.'/notes.dat.php');
 		$cc = count($fi);
-		// browse the pictures..
+// browse the pictures..
 		for($i=1; $i<$cc;$i++){
 			$pg2 = explode('|', $fi[$i]);
 			echo '
 		<form action="'. $_SERVER['REQUEST_URI'].'" method="post">
 			<div class="picbox">
-			<img src="'.$dir.$folder.'/th/'.$pg2[0].'" alt="picture" /><br />
+			<img src="'.$dir.$folder.'/'.$pg2[0].'" alt="picture" /><br />
 			<input type="hidden" name="imgName" value="'.$pg2[0].'" />
 			<input type="text" size="20" name="imgCap" value="'.urldecode($pg2[1]).'" /><br />
 			<input type="submit" name="imgSave" value="Save Image"  class="Button" /><br />
@@ -125,7 +126,7 @@ switch($pg){
 		</div>';
 	break;
 	case 'error':
-		echo '<b>Some errors occured</b>';
+		echo '<b>Some errors occured,Name of folder already exists.</b>';
 	break;
 	default:
 
@@ -183,7 +184,7 @@ function uploadNresizeGallery($file, $dir){
 				if(!file_exists($dir.'image'.$nr.$ext))
 				break; 
 			}
-			$SfilePath = $dir."th/image".$nr.$ext;
+			$SfilePath = $dir."/image".$nr.$ext;
 			$filePath = $dir."image".$nr.$ext;
 
 			$file = $_FILES['image']['tmp_name'];
@@ -227,7 +228,7 @@ class FileWriting {
 					}
 				}
 			}
-// if the id wasnt repeated in the file..
+// if the id was not repeated in the file..
 			if($nono == false){
 				if(!isset($gotcha) && $where == 'top'){
 					$data = file($file);
@@ -289,24 +290,4 @@ class FileWriting {
 	}
 }
 
-?>
-<style type="text/css">
-#PicGallery {
-float:left;
-width:880px;
-}
-#PicGallery .picbox {
-width:210px; float:left;
-background:#ddd;
-margin:2px; 
-border:1px solid #aaa;
- text-align:center;
-padding:2px;
-}
-.clr {
-clear:both;
-}
-#PicGallery .Button {
-margin:2px 0 !important;
-}
-</style>
+

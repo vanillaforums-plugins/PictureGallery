@@ -3,7 +3,7 @@
 $PluginInfo['PictureGallery'] = array(
    'Name' => 'Picture Gallery',
    'Description' => 'Adds a picture gallery to you website for you to add new pictures to your website with seperate folders for everyone to browse.<br />For some reason in my testing phase I wasn\'t able to disable this, so if you want to disable this addon, you\'ll have to edit your config file and take the following line out -- <b>$Configuration[\'EnabledPlugins\'][\'PictureGallery\'] = TRUE;</b>',
-   'Version' => '0.2.1',
+   'Version' => '0.2.2',
    'Author' => 'Yohn',
    'AuthorEmail' => 'john@skem9.com',
    'AuthorUrl' => 'http://www.skem9.com'
@@ -12,9 +12,11 @@ $PluginInfo['PictureGallery'] = array(
 class PictureGallery extends Gdn_Plugin {
 
 	public function Base_Render_Before($Sender) {
-		$Sender->Menu->AddLink('PictureGallery', T('Gallery'), '/gallery', FALSE);
+		$Session = Gdn::Session();
+       if ($Sender->Menu){
+$Sender->Menu->AddLink('PictureGallery', T('Gallery'),'/gallery'); 
 	}
-	 
+	} 
 	public function PluginController_Pictures_Create($Sender) {
 			$Sender->AddSideMenu('plugin/pictures');
 			$Sender->Render($this->GetView('manager.php'));

@@ -3,6 +3,10 @@ PictureGallery
 
 Adds a picture gallery to your vanillaforums website.
 
+Authors
+-------
+VrijVlinder contact@vrijvlinder.com
+Alessandro Miliucci
 
 Notes
 -----

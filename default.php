@@ -11,16 +11,16 @@ $PluginInfo['PictureGallery'] = array(
 
 class PictureGallery extends Gdn_Plugin {
 
-	public function Base_Render_Before(&$Sender) {
+	public function Base_Render_Before($Sender) {
 		$Sender->Menu->AddLink('PictureGallery', T('Gallery'), '/gallery', FALSE);
 	}
 	 
-	public function PluginController_Pictures_Create(&$Sender) {
+	public function PluginController_Pictures_Create($Sender) {
 			$Sender->AddSideMenu('plugin/pictures');
 			$Sender->Render($this->GetView('manager.php'));
 	}
 	
-	public function PluginController_Gallery_Create(&$Sender) {
+	public function PluginController_Gallery_Create($Sender) {
 			$Sender->ClearCssFiles();
 			$Sender->AddCssFile('style.css');
 			$Sender->MasterView = 'default';
@@ -29,12 +29,12 @@ class PictureGallery extends Gdn_Plugin {
 
 	public function Base_GetAppSettingsMenuItems_Handler($Sender) {
 		$Menu = $Sender->EventArguments['SideMenu'];
-		$Menu->AddLink('Appearance', T('Picture Gallery'), 'plugin/pictures', 'Garden.Settings.Manage');
+		$Menu->AddLink('Appearance', T('Picture Gallery'), 'plugin/pictures/', 'Garden.Settings.Manage');
 	}
 	
 	public function Setup() { 
 		Gdn::Router()->SetRoute('gallery','plugin/gallery','Internal');
-		if(!is_dir('uploads/picgal/')) $go = mkdir('uploads/picgal', 0777);
+		if(!is_dir('uploads/picgal/')) $go = mkdir('uploads/picgal/', 0775);
 	}
 	
 	 public function OnDisable() {

@@ -1,2 +1,42 @@
-.picGals .clr {clear:both;}
-.picGals .pics {float:left; width:225px; text-align:center;;}
+.picGals .clr {
+clear:both;
+}
+.picGals .pics {
+display: inline;
+width: 100%;
+text-align: center;
+margin: 0 auto;
+}
+.picGals .pics img {
+display: inline;
+width: 250px;
+height:auto;
+text-align: center;
+margin: 0 auto;
+}
+
+body.Dashboard.Plugin.gallery #Body {
+background:none transparent;
+}
+body.Dashboard.Plugin.gallery #Content h1 {
+display: block;
+margin: 0 auto;
+float: none;
+text-align: center;
+}
+body.Dashboard.Plugin.gallery #Content h2 {
+font-size: 130%;
+font-weight: bold;
+margin-bottom: 10px;
+color: aqua;
+text-align: center;
+border: 1px solid #666;
+}
+body.Dashboard.Plugin.gallery #Content{
+width:90%;
+margin: 0 auto;
+float: none;
+}
+body.Dashboard.Plugin.gallery #Panel{
+display:none;
+}

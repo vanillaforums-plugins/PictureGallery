@@ -4,7 +4,7 @@ $dir = 'uploads/picgal/';
 $PATH2IM = ''; // with a trailing slash -- /usr/local/bin/ for liquidweb.com servers.
 
 
-// making aa new folder..
+// making a new folder..
 if(isset($_POST['PGFolder'])){
 	// creating a new folder.
 	$dir = 'uploads/picgal/';
@@ -14,8 +14,8 @@ if(isset($_POST['PGFolder'])){
 		$doi = str_replace('  ', ' ', $doi);
 		$folder = str_replace(' ', '_', $doi);
 		// make directory
-		$go = mkdir($dir.$folder, 0777);
-		$go2 = mkdir($dir.$folder.'/th', 0777);
+		$go = mkdir($dir.$folder, 0775);
+		$go2 = mkdir($dir.$folder.'/th/', 0775);
 		//echo '<b>'.$doi.'</b><br />'.$folder.'<br />';
 		if($go == true){
 			$pg = 'upload';
@@ -48,10 +48,11 @@ if(isset($_POST['PGUpload'])){
 $path = $_SERVER['REQUEST_URI'];
 $ex = explode('/', $path);
 if(isset($ex[3])){
-	// first check if it is a directory
+	
+// first check if it is a directory
 	if(is_dir($dir.$ex[3])){
 		$pg = 'upload';
-		$doi = str_replace('_', ' ', $ex[3]);
+		$doi =str_replace(array('-','_'),'x', $ex[3]);
 		$folder = $ex[3];
 	} else {
 		echo '<b>The folder you are looking for could not be found.</b>';
@@ -64,7 +65,7 @@ if(isset($_POST['imgName']) && isset($_POST['imgSave'])){
 	switch($_POST['imgSave']){
 		case 'Delete Image':
 			echo 'deleting the image<br />';
-			unlink($dir.$folder.'/'.$_POST['imgName']);
+			unlink($dir.$folder.'/th/'.$_POST['imgName']);
 			unlink($dir.$folder.'/th/'.$_POST['imgName']);
 			$write2file = new FileWriting;
 			$gogo = $write2file->editLine($dir.$folder.'/notes.dat.php', array('where' => '0', 'id' => $_POST['imgName'], 'doW' => 'delete'));
@@ -96,7 +97,7 @@ switch($pg){
 			<div id="PicGallery">
 				<div>
 		<?php
-		// open and read the notes file..
+// open and read the notes file..
 		$fi = file($dir.$folder.'/notes.dat.php');
 		$cc = count($fi);
 		// browse the pictures..
@@ -105,7 +106,7 @@ switch($pg){
 			echo '
 		<form action="'. $_SERVER['REQUEST_URI'].'" method="post">
 			<div class="picbox">
-			<img src="/'.$dir.$folder.'/th/'.$pg2[0].'" alt="picture" /><br />
+			<img src="'.$dir.$folder.'/th/'.$pg2[0].'" alt="picture" /><br />
 			<input type="hidden" name="imgName" value="'.$pg2[0].'" />
 			<input type="text" size="20" name="imgCap" value="'.urldecode($pg2[1]).'" /><br />
 			<input type="submit" name="imgSave" value="Save Image"  class="Button" /><br />
@@ -143,7 +144,7 @@ switch($pg){
 	if ($dh = opendir($dir)) {
 		while (($file = readdir($dh)) !== false) {
 			if($file != '.' && $file != '..' && filetype($dir.$file) == 'dir'){
-				echo '<a href="/plugin/pictures/'.$file.'">'.str_replace('_', ' ', $file).'</a> - <br />';
+				echo '<a href="pictures/'.$file.'">'.str_replace('_', ' ', $file).'</a> - <br />';
 			}
 		}
 		closedir($dh);
@@ -208,7 +209,7 @@ function uploadNresizeGallery($file, $dir){
 
 class FileWriting {
 	
-	// do not include \n at the end of the lines to add to the file
+// do not include \n at the end of the lines to add to the file
 	function add2File($file, $line, $where='bottom', $check=''){
 		// $check = array('where' => 0|1 etc, find => what would b in where);
 		if(is_file($file)){
@@ -226,7 +227,7 @@ class FileWriting {
 					}
 				}
 			}
-			// if the id wasnt repeated in the file..
+// if the id wasnt repeated in the file..
 			if($nono == false){
 				if(!isset($gotcha) && $where == 'top'){
 					$data = file($file);
@@ -270,9 +271,9 @@ class FileWriting {
 		return 'done';
 	}
 	
-	// do not include \n at the end of the line..
+// do not include \n at the end of the line..
 	function editLine($file, $id, $line=''){
-		// $id = array('where' => 0, 'id' => $newId, 'doW' => 'edit|delete');
+// $id = array('where' => 0, 'id' => $newId, 'doW' => 'edit|delete');
 		$data = file($file);
 		$fows = count($data);
 		$write = '';
@@ -290,10 +291,22 @@ class FileWriting {
 
 ?>
 <style type="text/css">
-#PicGallery {float:left; width:880px;}
-#PicGallery .picbox {width:210px; float:left;
-background:#ddd; margin:2px; border:1px solid #aaa; text-align:center;
-padding:2px;}
-.clr {clear:both;}
-#PicGallery .Button {margin:2px 0 !important;}
+#PicGallery {
+float:left;
+width:880px;
+}
+#PicGallery .picbox {
+width:210px; float:left;
+background:#ddd;
+margin:2px; 
+border:1px solid #aaa;
+ text-align:center;
+padding:2px;
+}
+.clr {
+clear:both;
+}
+#PicGallery .Button {
+margin:2px 0 !important;
+}
 </style>
